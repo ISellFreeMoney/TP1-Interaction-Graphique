@@ -10,20 +10,26 @@
 var camera, scene, renderer;
 var windowScale;
 
-function someObject(material) {
+function someObject(material, x1, y1, x2, y2, i) {
 
 var geometry = new THREE.BufferGeometry();
 
-	const vertices = new Float32Array( [
-		3, 3, 0,
-		7, 3, 0,
-		7, 7, 0,
-		3, 3, 0,
-		7, 7, 0,
-		3, 7, 0 
-	] );
+for(var j = 1; j < i; j++) {
+	const vertices = new Float32Array([
+		j * x1, y1, 0.0,
+		j * x2, y1, 0.0,
+		j * x2, y2, 0.0,
+		j * x1, y1, 0.0,
+		j * x2, y2, 0.0,
+		j * x1, y2, 0.0,
 
+	]);
 	geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+	var mesh = new THREE.Mesh( geometry, material );
+	scene.add( mesh );
+}
+
+	
 
 
 
@@ -86,12 +92,6 @@ function addToDOM() {
 	container.appendChild( renderer.domElement );
 }
 
-function showGrids() {
-	// Background grid and axes. Grid step size is 1, axes cross at 0, 0
-	Coordinates.drawGrid({size:100,scale:1,orientation:"z"});
-	Coordinates.drawAxes({axisLength:11,axisOrientation:"x",axisRadius:0.04});
-	Coordinates.drawAxes({axisLength:11,axisOrientation:"y",axisRadius:0.04});
-}
 
 function render() {
 	renderer.render( scene, camera );
@@ -101,9 +101,8 @@ function render() {
 // Main body of the script
 try {
 	init();
-	showGrids();
 	var material = new THREE.MeshBasicMaterial( { color: 0xF6831E, side: THREE.FrontSide } );
-	someObject(material);
+	someObject(material, 1, 2, 2, 2, 10);
 	addToDOM();
 	render();
 } catch(e) {
